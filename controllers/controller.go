@@ -30,16 +30,19 @@ func GetStatus(ctx *gin.Context) {
 		return
 	}
 
-	var status models.Status
+	var data models.Status
 
-	json.Unmarshal(bytes, &status)
+	json.Unmarshal(bytes, &data)
 
-	waterStatus, windStatus := helpers.GetWaterStatus(status.Status.Water), helpers.GetWindStatus(status.Status.Wind)
+	waterStatus, windStatus := helpers.GetWaterStatus(data.Status.Water), helpers.GetWindStatus(data.Status.Wind)
+	waterClass, winedClass := helpers.GetWaterClass(data.Status.Water), helpers.GetWindClass(data.Status.Wind)
 
 	ctx.HTML(http.StatusOK, "index.html", gin.H{
-		"water":       status.Status.Water,
+		"water":       data.Status.Water,
 		"waterStatus": waterStatus,
-		"wind":        status.Status.Wind,
+		"waterClass":  waterClass,
+		"wind":        data.Status.Wind,
 		"windStatus":  windStatus,
+		"windClass":   winedClass,
 	})
 }
