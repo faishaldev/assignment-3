@@ -12,7 +12,7 @@ import (
 )
 
 func GetStatus(ctx *gin.Context) {
-	go helpers.UpdateJSONData()
+	helpers.UpdateJSONData()
 
 	jsonData, err := os.Open("data.json")
 
