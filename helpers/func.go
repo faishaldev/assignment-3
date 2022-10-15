@@ -32,7 +32,8 @@ func GetWindStatus(wind uint) string {
 func UpdateJSONData() {
 	water, wind := rand.Intn(100), rand.Intn(100)
 
-	jsonString := fmt.Sprintf(`{
+	jsonString := fmt.Sprintf(`
+	{
 		"status": {
 			"water": %v,
 			"wind": %v
@@ -42,7 +43,7 @@ func UpdateJSONData() {
 	data, err := os.Create("data.json")
 
 	if err != nil {
-		log.Fatal("Error in data.json: ", err.Error())
+		log.Fatal("Error in json update: ", err.Error())
 
 		return
 	}
@@ -50,7 +51,7 @@ func UpdateJSONData() {
 	_, err = data.Write([]byte(jsonString))
 
 	if err != nil {
-		log.Println("Error in data.json: ", err.Error())
+		log.Println("Error in json update: ", err.Error())
 
 		return
 	}

@@ -14,7 +14,7 @@ import (
 func GetStatus(ctx *gin.Context) {
 	helpers.UpdateJSONData()
 
-	data, err := os.Open("data.json")
+	jsonData, err := os.Open("data.json")
 
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
@@ -22,7 +22,7 @@ func GetStatus(ctx *gin.Context) {
 		return
 	}
 
-	bytes, err := ioutil.ReadAll(data)
+	bytes, err := ioutil.ReadAll(jsonData)
 
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
