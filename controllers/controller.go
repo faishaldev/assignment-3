@@ -1,24 +1,45 @@
 package controllers
 
 import (
+	"assignment-3/helpers"
 	"assignment-3/models"
-	"math/rand"
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 func GetStatus(ctx *gin.Context) {
-	models.Data[0].Water = uint(rand.Intn(20))
-	models.Data[0].Wind = uint(rand.Intn(20))
+	helpers.UpdateJSONData()
 
-	status := models.Status{
-		Water: models.Data[0].Water,
-		Wind:  models.Data[0].Wind,
+	data, err := os.Open("data.json")
+
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+
+		return
 	}
 
+	bytes, err := ioutil.ReadAll(data)
+
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+
+		return
+	}
+
+	var status models.Status
+
+	json.Unmarshal(bytes, &status)
+
+	waterStatus, windStatus := helpers.GetWaterStatus(status.Status.Water), helpers.GetWindStatus(status.Status.Wind)
+
 	ctx.HTML(http.StatusOK, "index.html", gin.H{
-		"water": status.Water,
-		"wind":  status.Wind,
+		"water":       status.Status.Water,
+		"waterStatus": waterStatus,
+		"wind":        status.Status.Wind,
+		"windStatus":  windStatus,
 	})
 }
